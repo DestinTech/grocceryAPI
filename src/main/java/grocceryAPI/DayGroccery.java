@@ -10,7 +10,6 @@ public class DayGroccery {
 	public void meal() {
 	
 	}
-	
 }
 /*
 meals = {

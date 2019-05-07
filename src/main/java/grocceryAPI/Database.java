@@ -40,12 +40,27 @@ public class Database {
    
     public void database(){	}					//Blank  initialization
     
-    public static ResultSet getMeal(int mealID) throws SQLException {
+    
+    //RESTFUL inteface for meals
+    public static ResultSet getMeal() throws SQLException {
     	ResultSet rs = null;
-    	String query = "SELECT * from meals where ID = ?";//SQL query template 
+    	String query = "SELECT * from meals where ID ";//SQL query template 
     	try (Connection conn = DriverManager.getConnection(url,user,password)){	//try the query
     		PreparedStatement preparedStmt = conn.prepareStatement(query);	//parse the query string template
-    		preparedStmt.setInt(0, mealID);
+    		rs = preparedStmt.executeQuery();				//execute the query
+    		conn.close();
+    	}
+    	catch(Exception e){
+    		System.err.println(e.getMessage());
+    	}
+		return rs;
+    }
+    public static ResultSet getMeal(int mealID) throws SQLException {
+    	ResultSet rs = null;
+    	String query = "SELECT * from meals where ID  = ? ";//SQL query template 
+    	try (Connection conn = DriverManager.getConnection(url,user,password)){	//try the query
+    		PreparedStatement preparedStmt = conn.prepareStatement(query);	//parse the query string template
+    		preparedStmt.setInt(1, mealID);
     		rs = preparedStmt.executeQuery();				//execute the query
     		conn.close();
     	}
@@ -56,9 +71,28 @@ public class Database {
     }
     
     
-    public void insertMeal() {}
-    public void deleteMeal() {}
-    public void updateMeal() {}
+    
+    public static boolean createMeal( double Expense, String Description, String Name) throws SQLException {
+    	String query = "INSERT INTO meals (Name, Description, Price) VALUES(?,?,?) ";
+    	try(Connection conn = DriverManager.getConnection(url, user, password)){
+    		PreparedStatement preparedStmt = conn.prepareStatement(query);
+    		preparedStmt.setDouble(3, Expense);
+    		preparedStmt.setString(1,Name);
+    		preparedStmt.setString(2, Description);
+    		preparedStmt.execute();
+    		conn.close();
+    		return true;
+    	}
+    	catch(Exception e) {
+    		System.err.println(e.getMessage());
+    	}
+    	return false;
+    }
+    			
+    	
+
+    public void deleteMeal(int mealID) {}
+    public void updateMeal(int mealID) {}
  
     
 }
