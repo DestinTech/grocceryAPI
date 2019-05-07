@@ -155,6 +155,22 @@ public class Database {
     	}
     	return false;
     }
+    public static boolean updateMealCost(int mealID, Double cost) throws SQLException {
+    	String query = "UPDATE meals set Price = ? where ID = ?";
+    	try(Connection conn = DriverManager.getConnection(url,user,password)){
+    		PreparedStatement preparedStmt = conn.prepareStatement(query);
+    		preparedStmt.setInt(2,mealID);
+    		preparedStmt.setDouble(1, cost);
+    		preparedStmt.execute();
+    		conn.close();
+    		return true;
+    		
+    	}
+    	catch(Exception e) {
+    		System.err.println(e.getMessage());
+    	}
+    	return false;
+    }
     
  
     /////////END RESTFUL INTERFACE FOR MEAL/////////////////////////////////////////////////////////////
