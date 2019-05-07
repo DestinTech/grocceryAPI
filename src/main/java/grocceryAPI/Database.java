@@ -41,7 +41,10 @@ public class Database {
     public void database(){	}					//Blank  initialization
     
     
-    //RESTFUL inteface for meals
+    
+    
+    
+    //////////////////////////////////////////////////RESTFUL interface for meals////////////
     public static ResultSet getMeal() throws SQLException {
     	ResultSet rs = null;
     	String query = "SELECT * from meals where ID ";//SQL query template 
@@ -55,7 +58,8 @@ public class Database {
     	}
 		return rs;
     }
-    public static ResultSet getMeal(int mealID) throws SQLException {
+    //Overloaded function
+    public static ResultSet getMeal(int mealID) throws SQLException {											//REST API GET
     	ResultSet rs = null;
     	String query = "SELECT * from meals where ID  = ? ";//SQL query template 
     	try (Connection conn = DriverManager.getConnection(url,user,password)){	//try the query
@@ -69,10 +73,23 @@ public class Database {
     	}
 		return rs;
     }
+    //Overloaded function
+    public static ResultSet getMeal(Double price) throws SQLException {											//REST API GET
+    	ResultSet rs = null;
+    	String query = "SELECT * from meals where price  <= ? ";//SQL query template 
+    	try (Connection conn = DriverManager.getConnection(url,user,password)){	//try the query
+    		PreparedStatement preparedStmt = conn.prepareStatement(query);	//parse the query string template
+    		preparedStmt.setDouble(1, price);
+    		rs = preparedStmt.executeQuery();				//execute the query
+    		conn.close();
+    	}
+    	catch(Exception e){
+    		System.err.println(e.getMessage());
+    	}
+		return rs;
+    }
     
-    
-    
-    public static boolean createMeal( double Expense, String Description, String Name) throws SQLException {
+    public static boolean createMeal( double Expense, String Description, String Name) throws SQLException { 	//REST API CREATE
     	String query = "INSERT INTO meals (Name, Description, Price) VALUES(?,?,?) ";
     	try(Connection conn = DriverManager.getConnection(url, user, password)){
     		PreparedStatement preparedStmt = conn.prepareStatement(query);
@@ -89,10 +106,57 @@ public class Database {
     	return false;
     }
     			
+    public static boolean deleteMeal(int mealID) throws SQLException {											//REST API DELETE 
+    	String query = "DELETE from meals where ID = ?";
     	
-
-    public void deleteMeal(int mealID) {}
-    public void updateMeal(int mealID) {}
+    	try(Connection conn = DriverManager.getConnection(url,user,password)){
+    		PreparedStatement preparedStmt = conn.prepareStatement(query);
+    		preparedStmt.setInt(1, mealID);
+    		preparedStmt.execute();
+    		conn.close();
+    		return true;
+    	
+    	}
+    	catch(Exception e) {
+    		System.err.println(e.getMessage());
+   		
+    	}
+		return false;
+    }
+    public static boolean updateMealName(int mealID, String name ) throws SQLException {
+    	String query = "UPDATE meals set Name = ? where ID = ?";
+    	try(Connection conn = DriverManager.getConnection(url,user,password)){
+    		PreparedStatement preparedStmt = conn.prepareStatement(query);
+    		preparedStmt.setInt(2,mealID);
+    		preparedStmt.setString(1, name);
+    		preparedStmt.execute();
+    		conn.close();
+    		return true;
+    		
+    	}
+    	catch(Exception e) {
+    		System.err.println(e.getMessage());
+    	}
+    	return false;
+    }
+    public static boolean updateMealDesc(int mealID, String Desc ) throws SQLException {
+    	String query = "UPDATE meals set Description = ? where ID = ?";
+    	try(Connection conn = DriverManager.getConnection(url,user,password)){
+    		PreparedStatement preparedStmt = conn.prepareStatement(query);
+    		preparedStmt.setInt(2,mealID);
+    		preparedStmt.setString(1, Desc);
+    		preparedStmt.execute();
+    		conn.close();
+    		return true;
+    		
+    	}
+    	catch(Exception e) {
+    		System.err.println(e.getMessage());
+    	}
+    	return false;
+    }
+    
  
+    /////////END RESTFUL INTERFACE FOR MEAL/////////////////////////////////////////////////////////////
     
 }
