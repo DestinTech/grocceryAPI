@@ -11,7 +11,7 @@ public class Application{
 	static int people = 5;	//people in this budget
 	static double dailyBudget =  (budget /days)/people;	//calculated daily budget
 	//food/calories
-	static int calories = 2500; //kcal
+	static int reqCalories = 2500; //kcal
 	static int meals = 3;		//HOW MANY MEALS PER DAY
 	static int snacks = 2; 	//how many snacks per day
 
@@ -120,7 +120,8 @@ public class Application{
 				String expense = rs.getString("Name");
 				String Description = rs.getString("Description");
 				Double mealPrice = rs.getDouble("Price");
-				System.out.println("ID: "+ mealID+ ", "+expense+", "+Description+", "+mealPrice);
+				Double calories = rs.getDouble("Calories");
+				System.out.println("ID: "+ mealID+ ", "+expense+", "+Description+", $"+mealPrice +", "+ calories+" cal.");
 			}
 		} catch (SQLException e) {
 			// Auto-generated catch block
@@ -138,7 +139,9 @@ public class Application{
 				String expense = rs.getString("Name");
 				String Description = rs.getString("Description");
 				Double mealPrice = rs.getDouble("Price");
-				System.out.println("ID: "+ mealID+ ", "+expense+", "+Description+", "+mealPrice);
+				Double calories = rs.getDouble("Calories");
+
+				System.out.println("ID: "+ mealID+ ", "+expense+", "+Description+", $"+mealPrice+", "+ calories+" cal.");
 			}
 		} catch (SQLException e) {
 			// Auto-generated catch block

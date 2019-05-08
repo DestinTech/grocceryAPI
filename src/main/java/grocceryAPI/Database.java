@@ -11,30 +11,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 
-/*
-Make a query to obtain all the records whose date on the table are greater than 
-//	11/1/2010 (November onwards) showing all the fields.
-
-Make a query to obtain all records on the table whose date is less than 
-	11/1/2010 (October to back) and its amount is greater than one hundred dollars, 
-	showing all fields
-
-Perform using SQL an update of those whose date is less than 
-	11/15/2010 by modifying the date to the current date. Once the update has been made, can the affected records in the previous update have the amount modified? What should we have done?
-
-Execute using the SQL a deletion of records whose amount is greater than 
-	$200.
-
-Can two records be completely alike? How could you differentiate them?
-
-
-*/
 public class Database {
 	private static  final String url = "jdbc:mariadb://172.16.1.95/testing_database";	
 	private static final String user = "pmauser";
 	private static final String password = "password_here";
 	
-	
+
     Calendar calendar = Calendar.getInstance();			//initialize instance of a calendar(days, months, etc)
     java.sql.Date startDate = new java.sql.Date(calendar.getTime().getTime());
    
@@ -89,7 +71,7 @@ public class Database {
 		return rs;
     }
     
-    public static boolean createMeal( double Expense, String Description, String Name) throws SQLException { 	//REST API CREATE
+    public static boolean createMeal( double Expense, String Name, String Description) throws SQLException { 	//REST API CREATE
     	String query = "INSERT INTO meals (Name, Description, Price) VALUES(?,?,?) ";
     	try(Connection conn = DriverManager.getConnection(url, user, password)){
     		PreparedStatement preparedStmt = conn.prepareStatement(query);
@@ -161,6 +143,22 @@ public class Database {
     		PreparedStatement preparedStmt = conn.prepareStatement(query);
     		preparedStmt.setInt(2,mealID);
     		preparedStmt.setDouble(1, cost);
+    		preparedStmt.execute();
+    		conn.close();
+    		return true;
+    		
+    	}
+    	catch(Exception e) {
+    		System.err.println(e.getMessage());
+    	}
+    	return false;
+    }
+    public static boolean updateMealCal(int mealID, Double cal) throws SQLException {
+    	String query = "UPDATE meals set Calories = ? where ID = ?";
+    	try(Connection conn = DriverManager.getConnection(url,user,password)){
+    		PreparedStatement preparedStmt = conn.prepareStatement(query);
+    		preparedStmt.setInt(2,mealID);
+    		preparedStmt.setDouble(1, cal);
     		preparedStmt.execute();
     		conn.close();
     		return true;
