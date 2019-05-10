@@ -27,7 +27,7 @@ public class Application{
 	public static void main(String[] args ) throws SQLException{
 		clearScreen();
 		
-	//TODO : incorporate callories in to calculation and return a groccery list that is appropriate System.out.println("")
+	//TODO : incorporate calories in to calculation and return a groccery list that is appropriate System.out.println("")
 
 	//Main 
 		System.out.println("Budget: $"+ budget + " per " +days +" days");				// month budget and days between shopping
@@ -38,6 +38,10 @@ public class Application{
 
 	//Menu
 		while (1==1) {
+			ResultSet rs = getMeal(12.0, 100);
+			for (int i =0; i<= g)
+
+			
 			System.out.println();
 			System.out.print("Add, Delete, Update, View... Selection: ");
 			String x = scanner.nextLine();
@@ -158,4 +162,40 @@ public class Application{
     System.out.flush();
     }
 	
+    public static void generateDay() {
+    	//Generate a day worth of meals that are under the budget
+
+		try {
+			ResultSet rs = Database.getMeal();
+			while(rs.next()) {	//traverse the result set
+				int mealID = rs.getInt("ID");			//String element = rs.getString('identifier);
+				String expense = rs.getString("Name");
+				String Description = rs.getString("Description");
+				Double mealPrice = rs.getDouble("Price");
+				Double calories = rs.getDouble("Calories");
+
+				System.out.println("ID: "+ mealID+ ", "+expense+", "+Description+", $"+mealPrice+", "+ calories+" cal.");
+			}
+		} catch (SQLException e) {
+			// Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    public static ResultSet getMeal(Double price, int calories ) {
+		try {
+			ResultSet rs = Database.getMeal(11.0, 250);
+			while(rs.next()) {	//traverse the result set
+				int mealID = rs.getInt("ID");			//String element = rs.getString('identifier);
+				String expense = rs.getString("Name");
+				String Description = rs.getString("Description");
+				Double mealPrice = rs.getDouble("Price");
+				Double mealCalories = rs.getDouble("Calories");				
+				System.out.println("ID: "+ mealID+ ", "+expense+", "+Description+", $"+mealPrice+", "+ mealCalories+" cal.");
+				return rs;
+			}
+		} catch (SQLException e) {
+			// Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
 }

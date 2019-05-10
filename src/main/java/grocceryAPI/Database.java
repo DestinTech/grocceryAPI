@@ -169,8 +169,26 @@ public class Database {
     	}
     	return false;
     }
-    
- 
+   public static ResultSet getMeal(double budget, int  cal) {
+	   String query = "Select * from meals where Calories  >= ? and Price <= ? ";
+	   try(Connection conn = DriverManager.getConnection(url,user,password)){
+		   PreparedStatement preparedStmt = conn.prepareStatement(query);
+		   preparedStmt.setInt(1,cal);
+		   preparedStmt.setDouble(2, budget);
+		   ResultSet rs = preparedStmt.executeQuery();
+		   conn.close();
+		   return rs;
+		   /*	try (Connection conn = DriverManager.getConnection(url,user,password)){	//try the query
+   		PreparedStatement preparedStmt = conn.prepareStatement(query);	//parse the query string template
+   		rs = preparedStmt.executeQuery();				//execute the query
+   		conn.close(); */
+   	}
+	   catch (Exception e) {
+		   System.err.println(e.getMessage());
+	   }
+	return null;
+	   
+   }
     /////////END RESTFUL INTERFACE FOR MEAL/////////////////////////////////////////////////////////////
     
 }
